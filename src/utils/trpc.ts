@@ -43,7 +43,7 @@ export const queryClient = new QueryClient({
 });
 
 // Determine the server URL
-// In production (Vercel), use relative URL which works with rewrites
+// In production (Vercel), call API directly at /api/trpc (more reliable than rewrites)
 // In development, use the VITE_SERVER_URL or default to localhost
 const getServerUrl = () => {
 	// If VITE_SERVER_URL is explicitly set, use it
@@ -51,10 +51,10 @@ const getServerUrl = () => {
 		return `${import.meta.env.VITE_SERVER_URL}/trpc`
 	}
 	
-	// In production (on Vercel), use relative URL
-	// This works because vercel.json rewrites /trpc/* to /api/trpc/*
+	// In production (on Vercel), use direct API path
+	// This calls the serverless function directly at /api/trpc
 	if (import.meta.env.PROD) {
-		return "/trpc"
+		return "/api/trpc"
 	}
 	
 	// Development fallback

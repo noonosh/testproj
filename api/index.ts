@@ -11,16 +11,18 @@ app.use(logger())
 app.use(
 	"/*",
 	cors({
-		origin: (origin) => {
+		origin: (origin, c) => {
 			// Allow requests from the same origin (for Vercel deployment)
 			// or from explicitly allowed origins
-			if (!origin) return true // Same-origin requests
+			if (!origin) return origin // Same-origin requests
 			if (process.env.CORS_ORIGIN) {
-				const allowedOrigins = process.env.CORS_ORIGIN.split(",").map(o => o.trim())
-				return allowedOrigins.includes(origin)
+				const allowedOrigins = process.env.CORS_ORIGIN.split(",").map(
+					(o) => o.trim()
+				)
+				return allowedOrigins.includes(origin) ? origin : null
 			}
 			// In production, allow all origins (since frontend and API are on same domain)
-			return true
+			return origin
 		},
 		allowMethods: ["GET", "POST", "OPTIONS"],
 		allowHeaders: ["Content-Type"],
@@ -55,10 +57,8 @@ app.use(
 )
 
 // Handle tRPC routes
-// Vercel routes requests to this function, and the path can be either:
-// - /trpc/* (if Vercel strips /api prefix)
-// - /api/trpc/* (if Vercel keeps full path)
-// We handle both cases to be safe
+// When Vercel routes /api/trpc/* to this function, the path includes /api
+// So we need to match /api/trpc/* in the Hono app
 const trpcHandler = trpcServer({
 	router: appRouter,
 	createContext: (_opts, context) => {
@@ -66,8 +66,11 @@ const trpcHandler = trpcServer({
 	},
 })
 
-app.use("/trpc/*", trpcHandler)
+// Match /api/trpc/* (full path as received by Vercel)
 app.use("/api/trpc/*", trpcHandler)
+
+// Also handle /trpc/* in case Vercel strips the /api prefix
+app.use("/trpc/*", trpcHandler)
 
 // Health check endpoint
 app.get("/", (c) => {
