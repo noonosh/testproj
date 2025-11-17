@@ -1,18 +1,43 @@
-# testproj
+# Mathematical Expression Evaluator
 
-This project was created with [Better-T-Stack](https://github.com/AmanVarshney01/create-better-t-stack), a modern TypeScript stack that combines React, TanStack Router, Hono, TRPC, and more.
+A modern, clean, and minimalist mathematical expression calculator powered by **Califi**. Built with Better-T-Stack for a seamless full-stack TypeScript experience.
 
-## Features
+## About
 
-- **TypeScript** - For type safety and improved developer experience
-- **TanStack Router** - File-based routing with full type safety
-- **TailwindCSS** - Utility-first CSS for rapid UI development
-- **shadcn/ui** - Reusable UI components
-- **Hono** - Lightweight, performant server framework
-- **tRPC** - End-to-end type-safe APIs
-- **Bun** - Runtime environment
-- **Turborepo** - Optimized monorepo build system
-- **Starlight** - Documentation site with Astro
+This application provides a simple, elegant interface for evaluating mathematical expressions. The design philosophy emphasizes:
+
+- **Minimalism** - Clean lines, neutral colors, focused layout
+- **Authenticity** - Feels like a professional mathematical tool
+- **Simplicity** - Single page, no authentication, just pure functionality
+- **Usability** - Persistent history, quick examples, keyboard-friendly
+
+## Key Features
+
+- ✨ **Instant Evaluation** - Calculate complex mathematical expressions in real-time
+- 📚 **History Tracking** - Persistent calculation history using localStorage
+- 🎯 **Quick Examples** - Clickable sample expressions to get started
+- 🌓 **Dark Mode** - Beautiful light and dark themes
+- 📱 **Responsive** - Works seamlessly on all devices
+- ⌨️ **Keyboard Friendly** - Press Enter to calculate, autofocus on input
+
+## Supported Operations
+
+- **Basic**: `+`, `-`, `*`, `/`, `^`, `**`
+- **Roots**: `sqrt()`, `cbrt()`
+- **Trigonometry**: `sin()`, `cos()`, `tan()`
+- **Logarithms**: `log()`, `ln()`
+- **Rounding**: `abs()`, `ceil()`, `floor()`
+- **Constants**: `pi`, `e`
+
+## Technology Stack
+
+- **Frontend**: React + TanStack Router
+- **Backend**: Hono + tRPC
+- **Math Engine**: [Califi](https://www.npmjs.com/package/califi)
+- **UI Components**: shadcn/ui
+- **Styling**: Tailwind CSS v4
+- **Build Tool**: Vite + Turborepo
+- **Runtime**: Bun
 
 ## Getting Started
 

@@ -10,12 +10,14 @@
     "start": "bun run dist/index.js"
   },
   "dependencies": {
-    "hono": "catalog:",
-    "@trpc/server": "catalog:",
     "@hono/trpc-server": "^0.4.0",
+    "@testproj/api": "workspace:*",
+    "@trpc/server": "catalog:",
+    "califi": "^1.0.0",
     "dotenv": "catalog:",
-    "zod": "catalog:",
-    "@testproj/api": "workspace:*"
+    "hono": "catalog:",
+    "hono-rate-limiter": "^0.4.2",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "typescript": "catalog:",

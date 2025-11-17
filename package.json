@@ -26,6 +26,7 @@
     "dev:server": "turbo -F server dev"
   },
   "dependencies": {
+    "califi": "^1.0.0",
     "dotenv": "^17.2.2",
     "zod": "^4.1.11"
   },

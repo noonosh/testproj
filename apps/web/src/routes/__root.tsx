@@ -22,11 +22,11 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 	head: () => ({
 		meta: [
 			{
-				title: "testproj",
+				title: "CalcApp - Mathematical Expression Calculator",
 			},
 			{
 				name: "description",
-				content: "testproj is a web application",
+				content: "Evaluate mathematical expressions instantly with CalcApp, powered by Califi",
 			},
 		],
 		links: [
@@ -44,13 +44,15 @@ function RootComponent() {
 			<HeadContent />
 			<ThemeProvider
 				attribute="class"
-				defaultTheme="dark"
+				defaultTheme="light"
 				disableTransitionOnChange
 				storageKey="vite-ui-theme"
 			>
-				<div className="grid grid-rows-[auto_1fr] h-svh">
+				<div className="min-h-screen flex flex-col">
 					<Header />
-					<Outlet />
+					<main className="flex-1">
+						<Outlet />
+					</main>
 				</div>
 				<Toaster richColors />
 			</ThemeProvider>
