@@ -42,10 +42,29 @@ export const queryClient = new QueryClient({
 	}),
 });
 
+// Determine the server URL
+// In production (Vercel), use relative URL which works with rewrites
+// In development, use the VITE_SERVER_URL or default to localhost
+const getServerUrl = () => {
+	// If VITE_SERVER_URL is explicitly set, use it
+	if (import.meta.env.VITE_SERVER_URL) {
+		return `${import.meta.env.VITE_SERVER_URL}/trpc`
+	}
+	
+	// In production (on Vercel), use relative URL
+	// This works because vercel.json rewrites /trpc/* to /api/trpc/*
+	if (import.meta.env.PROD) {
+		return "/trpc"
+	}
+	
+	// Development fallback
+	return "http://localhost:3001/trpc"
+}
+
 export const trpcClient = createTRPCClient<AppRouter>({
 	links: [
 		httpBatchLink({
-			url: `${import.meta.env.VITE_SERVER_URL || "http://localhost:3001"}/trpc`,
+			url: getServerUrl(),
 		}),
 	],
 });

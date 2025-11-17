@@ -11,8 +11,20 @@ app.use(logger())
 app.use(
 	"/*",
 	cors({
-		origin: process.env.CORS_ORIGIN || "*",
+		origin: (origin) => {
+			// Allow requests from the same origin (for Vercel deployment)
+			// or from explicitly allowed origins
+			if (!origin) return true // Same-origin requests
+			if (process.env.CORS_ORIGIN) {
+				const allowedOrigins = process.env.CORS_ORIGIN.split(",").map(o => o.trim())
+				return allowedOrigins.includes(origin)
+			}
+			// In production, allow all origins (since frontend and API are on same domain)
+			return true
+		},
 		allowMethods: ["GET", "POST", "OPTIONS"],
+		allowHeaders: ["Content-Type"],
+		credentials: true,
 	})
 )
 
@@ -43,16 +55,19 @@ app.use(
 )
 
 // Handle tRPC routes
-// When Vercel routes /api/trpc/* to this function, the path is /trpc/*
-app.use(
-	"/trpc/*",
-	trpcServer({
-		router: appRouter,
-		createContext: (_opts, context) => {
-			return createContext({context})
-		},
-	})
-)
+// Vercel routes requests to this function, and the path can be either:
+// - /trpc/* (if Vercel strips /api prefix)
+// - /api/trpc/* (if Vercel keeps full path)
+// We handle both cases to be safe
+const trpcHandler = trpcServer({
+	router: appRouter,
+	createContext: (_opts, context) => {
+		return createContext({context})
+	},
+})
+
+app.use("/trpc/*", trpcHandler)
+app.use("/api/trpc/*", trpcHandler)
 
 // Health check endpoint
 app.get("/", (c) => {
