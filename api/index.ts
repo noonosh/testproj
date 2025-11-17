@@ -56,9 +56,13 @@ app.use(
 	})
 )
 
+// Health check endpoint
+app.get("/", (c) => {
+	return c.text("OK")
+})
+
 // Handle tRPC routes
-// When Vercel routes /api/trpc/* to this function, the path includes /api
-// So we need to match /api/trpc/* in the Hono app
+// Vercel behavior can vary - try both path patterns
 const trpcHandler = trpcServer({
 	router: appRouter,
 	createContext: (_opts, context) => {
@@ -66,17 +70,14 @@ const trpcHandler = trpcServer({
 	},
 })
 
-// Match /api/trpc/* (full path as received by Vercel)
-app.use("/api/trpc/*", trpcHandler)
-
-// Also handle /trpc/* in case Vercel strips the /api prefix
+// Try /trpc/* first (Vercel strips /api prefix)
 app.use("/trpc/*", trpcHandler)
 
-// Health check endpoint
-app.get("/", (c) => {
-	return c.text("OK")
-})
+// Also try /api/trpc/* in case Vercel keeps the full path
+app.use("/api/trpc/*", trpcHandler)
 
 // Export the Hono app for Vercel serverless functions
-// Vercel automatically detects this as a serverless function and uses the fetch handler
-export default app
+// Vercel needs the fetch handler explicitly
+export default {
+	fetch: app.fetch,
+}
