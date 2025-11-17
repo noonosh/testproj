@@ -63,7 +63,7 @@ A simple Vite app for evaluating mathematical expressions, powered by Califi.
     ```
 
 4. **Open your browser**:
-   Navigate to `http://localhost:3000` (frontend)
+   Navigate to `http://localhost:3001`
 
 ## Available Scripts
 
