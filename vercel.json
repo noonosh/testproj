@@ -9,10 +9,5 @@
 			"source": "/trpc/(.*)",
 			"destination": "/api/trpc/$1"
 		}
-	],
-	"functions": {
-		"api/index.ts": {
-			"runtime": "@vercel/node"
-		}
-	}
+	]
 }
