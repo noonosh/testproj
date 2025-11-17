@@ -1,20 +1,20 @@
-import { trpcServer } from "@hono/trpc-server";
-import { Hono } from "hono";
-import { cors } from "hono/cors";
-import { logger } from "hono/logger";
-import { rateLimiter } from "hono-rate-limiter";
-import { appRouter, createContext } from "../server/trpc";
+import {trpcServer} from "@hono/trpc-server"
+import {Hono} from "hono"
+import {cors} from "hono/cors"
+import {logger} from "hono/logger"
+import {rateLimiter} from "hono-rate-limiter"
+import {appRouter, createContext} from "../server/trpc"
 
-const app = new Hono();
+const app = new Hono()
 
-app.use(logger());
+app.use(logger())
 app.use(
 	"/*",
 	cors({
 		origin: process.env.CORS_ORIGIN || "*",
 		allowMethods: ["GET", "POST", "OPTIONS"],
 	})
-);
+)
 
 // Rate limiter: 30 requests per minute per IP address
 app.use(
@@ -37,29 +37,28 @@ app.use(
 					},
 				},
 				429
-			);
+			)
 		},
 	})
-);
+)
 
 // Handle tRPC routes
-// The rewrite rule in vercel.json routes /trpc/* to /api/trpc/*
-// So we handle /trpc/* here (which becomes /api/trpc/* after rewrite)
+// When Vercel routes /api/trpc/* to this function, the path is /trpc/*
 app.use(
 	"/trpc/*",
 	trpcServer({
 		router: appRouter,
 		createContext: (_opts, context) => {
-			return createContext({ context });
+			return createContext({context})
 		},
 	})
-);
+)
 
+// Health check endpoint
 app.get("/", (c) => {
-	return c.text("OK");
-});
+	return c.text("OK")
+})
 
 // Export the Hono app for Vercel serverless functions
-// Vercel will automatically handle the fetch handler
-export default app;
-
+// Vercel automatically detects this as a serverless function and uses the fetch handler
+export default app
